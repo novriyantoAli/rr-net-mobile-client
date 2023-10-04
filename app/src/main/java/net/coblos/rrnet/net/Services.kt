@@ -1,6 +1,7 @@
 package net.coblos.rrnet.net
 
 import net.coblos.rrnet.domain.model.req.LoginRequest
+import net.coblos.rrnet.domain.model.req.PostMobileReq
 import net.coblos.rrnet.domain.model.req.PostVerificationReq
 import net.coblos.rrnet.domain.model.res.PostMobileRes
 import net.coblos.rrnet.domain.model.res.PostVerificationRes
@@ -18,7 +19,7 @@ interface Services {
     suspend fun login(@Url url: String, @Field("username") uname: String, @Field("password") psswd: String): String
 
     @POST
-    suspend fun postMobile(@Url url: String, @Body mobile: String): PostMobileRes
+    suspend fun postMobile(@Url url: String, @Body mobile: PostMobileReq): PostMobileRes
 
     @POST
     suspend fun postVerification(@Url url: String, @Body verification: PostVerificationReq): PostVerificationRes

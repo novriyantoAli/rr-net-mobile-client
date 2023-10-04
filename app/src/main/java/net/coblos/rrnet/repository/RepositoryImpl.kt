@@ -4,7 +4,10 @@ import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import net.coblos.rrnet.domain.DataState
+import net.coblos.rrnet.domain.model.req.PostMobileReq
+import net.coblos.rrnet.domain.model.req.PostVerificationReq
 import net.coblos.rrnet.domain.model.res.PostMobileRes
+import net.coblos.rrnet.domain.model.res.PostVerificationRes
 import net.coblos.rrnet.net.Services
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -20,7 +23,6 @@ class RepositoryImpl @Inject constructor(private val services: Services) : Repos
             val postLogin = services.login(url, username, password)
 
             Log.e("HTML", postLogin)
-
             val doc: Document = Jsoup.parse(postLogin)
             val elements: Elements = doc.select("div.alert.bg-danger.text-center.mr-t-10")
             emit(DataState.Success(elements.text()))
@@ -33,11 +35,26 @@ class RepositoryImpl @Inject constructor(private val services: Services) : Repos
         }
     }
 
-    override suspend fun postMobile(url: String, mobile: String): Flow<DataState<Int>> = flow {
+    override suspend fun postMobile(url: String, mobile: String): Flow<DataState<PostMobileRes>> = flow {
         emit(DataState.Loading)
         try {
-            val postMobile = services.postMobile(url, mobile)
-            emit(DataState.Success(postMobile.result))
+            val postMobile = services.postMobile(url, PostMobileReq(mobile))
+            emit(DataState.Success(postMobile))
+        } catch (e: HttpException) {
+            e.printStackTrace()
+            emit(DataState.Error(Exception(e)))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(DataState.Error(e))
+        }
+    }
+
+    override suspend fun postVerification(
+        url: String, verification: String
+    ): Flow<DataState<PostVerificationRes>> = flow {
+        try {
+            val postVerification = services.postVerification(url, PostVerificationReq(verification))
+            emit(DataState.Success(postVerification))
         } catch (e: HttpException) {
             e.printStackTrace()
             emit(DataState.Error(Exception(e)))

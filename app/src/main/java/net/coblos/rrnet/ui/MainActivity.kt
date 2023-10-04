@@ -12,11 +12,18 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import net.coblos.rrnet.R
 import net.coblos.rrnet.databinding.ActivityMainBinding
 import net.coblos.rrnet.domain.session.SessionManager
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -25,6 +32,20 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
 
+//    fun createConstraints() = Constraints.Builder()
+//        .setRequiresCharging(false)
+//        .setRequiresBatteryNotLow(false)
+//        .setRequiredNetworkType(NetworkType.CONNECTED)
+//        .build()
+//
+//    fun createWorkRequest(data: Data) = PeriodicWorkRequestBuilder<MyWorker>(15, TimeUnit.MINUTES)
+//        .setInputData(data)
+//        .setConstraints(createConstraints())
+//        .setBackoffCriteria(BackoffPolicy.LINEAR, PeriodicWorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
+//        .build()
+//    fun startWork(){
+//
+//    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -32,6 +53,8 @@ class MainActivity : AppCompatActivity() {
         if (!sessionManager.isLoggedIn()) {
             viewModel.logout()
         } else {
+            //create work
+//            startWork()
             viewModel.login(sessionManager.getUserIdFromSession()!!)
         }
 
@@ -80,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navController.addOnDestinationChangedListener { _, des, _ ->
             Log.e("DESTINATION", des.displayName)
-            navView.visibility = if(des.id == R.id.navigation_login) {
+            navView.visibility = if(des.id == R.id.navigation_otp_mobile) {
                 View.GONE
             } else {
                 View.VISIBLE

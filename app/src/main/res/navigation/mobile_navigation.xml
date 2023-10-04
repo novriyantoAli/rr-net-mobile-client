@@ -24,9 +24,21 @@
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
-        android:id="@+id/navigation_login"
-        android:name="net.coblos.rrnet.ui.login.LoginFragment"
-        android:label="@string/title_login"
-        tools:layout="@layout/fragment_login"/>
+        android:id="@+id/navigation_otp_mobile"
+        android:name="net.coblos.rrnet.ui.otp.OtpFragmentMobile"
+        android:label="@string/title_otp_mobile"
+        tools:layout="@layout/fragment_otp_mobile">
+        <action
+            android:id="@+id/action_fragmentOtpMobile_to_fragmentOtpVerification"
+            app:destination="@id/navigation_otp_verification"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_otp_verification"
+        android:name="net.coblos.rrnet.ui.otp.OtpFragmentVerification"
+        android:label="@string/title_otp_verification"
+        tools:layout="@layout/fragment_otp_verification"/>
+
 
 </navigation>

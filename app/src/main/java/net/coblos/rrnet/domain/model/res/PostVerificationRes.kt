@@ -4,12 +4,12 @@ import com.google.gson.annotations.SerializedName
 import net.coblos.rrnet.domain.model.ClientAuth
 
 data class PostVerificationRes(
-    @SerializedName("status")
-    val status: String,
-
+    @SerializedName("error")
+    val error: Boolean,
     @SerializedName("message")
-    val message:String,
-
+    val message: String?,
+    @SerializedName("detailed")
+    val detailed: Any?,
     @SerializedName("data")
-    val data: ClientAuth
+    val data: ClientAuth?
 )
