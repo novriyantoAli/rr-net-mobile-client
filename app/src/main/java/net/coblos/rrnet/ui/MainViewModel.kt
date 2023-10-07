@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import net.coblos.rrnet.domain.DataState
+import net.coblos.rrnet.domain.model.ClientAuth
+import net.coblos.rrnet.domain.model.res.PostMobileRes
 import net.coblos.rrnet.repository.Repository
 import javax.inject.Inject
 
@@ -18,9 +20,13 @@ class MainViewModel @Inject constructor(private val repository: Repository): Vie
     val dataState: LiveData<String?>
         get() = _dataState
 
-    private val _dataStatePostMobile = MutableLiveData<DataState<Int>>()
-    val dataStatePostMobile: LiveData<DataState<Int>>
+    private val _dataStatePostMobile = MutableLiveData<DataState<PostMobileRes>>()
+    val dataStatePostMobile: LiveData<DataState<PostMobileRes>>
         get() = _dataStatePostMobile
+
+    private val _dataStatePostVerification = MutableLiveData<DataState<ClientAuth?>>()
+    val dataStatePostVerification: LiveData<DataState<ClientAuth?>>
+        get() = _dataStatePostVerification
 
     fun login(user: String) {
         _dataState.value = user
@@ -35,7 +41,11 @@ class MainViewModel @Inject constructor(private val repository: Repository): Vie
     }
 
     fun postVerification(url: String, verification: String){
-
+        viewModelScope.launch {
+            repository.postVerification(url, verification)
+                .onEach { dataState -> _dataStatePostVerification.value = dataState }
+                .launchIn(viewModelScope)
+        }
     }
 
     fun logout(){

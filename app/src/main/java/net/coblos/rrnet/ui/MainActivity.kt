@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -23,38 +24,31 @@ import dagger.hilt.android.AndroidEntryPoint
 import net.coblos.rrnet.R
 import net.coblos.rrnet.databinding.ActivityMainBinding
 import net.coblos.rrnet.domain.session.SessionManager
+import net.coblos.rrnet.utils.BackgroundWorker
+import net.coblos.rrnet.utils.BaseActivity
+import net.coblos.rrnet.utils.WorkHandler
+import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
     private val viewModel: MainViewModel by viewModels()
 
-//    fun createConstraints() = Constraints.Builder()
-//        .setRequiresCharging(false)
-//        .setRequiresBatteryNotLow(false)
-//        .setRequiredNetworkType(NetworkType.CONNECTED)
-//        .build()
-//
-//    fun createWorkRequest(data: Data) = PeriodicWorkRequestBuilder<MyWorker>(15, TimeUnit.MINUTES)
-//        .setInputData(data)
-//        .setConstraints(createConstraints())
-//        .setBackoffCriteria(BackoffPolicy.LINEAR, PeriodicWorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
-//        .build()
-//    fun startWork(){
-//
-//    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        WorkHandler.workInfo.observe(this) {
+
+        }
 
         val sessionManager = SessionManager(this)
         if (!sessionManager.isLoggedIn()) {
             viewModel.logout()
         } else {
             //create work
-//            startWork()
             viewModel.login(sessionManager.getUserIdFromSession()!!)
         }
 
@@ -103,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navController.addOnDestinationChangedListener { _, des, _ ->
             Log.e("DESTINATION", des.displayName)
-            navView.visibility = if(des.id == R.id.navigation_otp_mobile) {
+            navView.visibility = if(des.id == R.id.navigation_otp_mobile || des.id == R.id.navigation_otp_verification) {
                 View.GONE
             } else {
                 View.VISIBLE

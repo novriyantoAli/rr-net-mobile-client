@@ -40,6 +40,9 @@ class OtpFragmentMobile : Fragment() {
 
                 }
                 is DataState.Success -> {
+                    Toast.makeText(
+                        requireContext(), postMobile.data.message, Toast.LENGTH_SHORT
+                    ).show()
                     findNavController().navigate(
                         R.id.action_fragmentOtpMobile_to_fragmentOtpVerification
                     )
@@ -61,27 +64,31 @@ class OtpFragmentMobile : Fragment() {
             if (mobileNumber?.text.toString().isEmpty()) {
                 Toast.makeText(
                     requireContext(),
-                    getString(R.string.message_mobile_number_cannot_empty),
+                    resources.getString(R.string.message_mobile_number_cannot_empty),
                     Toast.LENGTH_SHORT
                 ).show()
+                return@setOnClickListener
             }
             if (mobileNumber?.text.toString().isBlank()) {
                 Toast.makeText(
                     requireContext(),
-                    getString(R.string.message_mobile_number_cannot_empty),
+                    resources.getString(R.string.message_mobile_number_cannot_empty),
                     Toast.LENGTH_SHORT
                 ).show()
+                return@setOnClickListener
             }
             if (mobileNumber?.text.toString().length < 9) {
                 Toast.makeText(
                     requireContext(),
-                    getString(R.string.message_invalid_mobile_number),
+                    resources.getString(R.string.message_invalid_mobile_number),
                     Toast.LENGTH_SHORT
                 ).show()
+                return@setOnClickListener
             }
 
             val sessionManager = SessionManager(requireContext())
-            viewModel.postMobile(sessionManager.getServerURL(), mobileNumber?.text.toString())
+            val path = sessionManager.getServerURL() + resources.getString(R.string.path_api_sign_up)
+            viewModel.postMobile(path, mobileNumber?.text.toString())
         }
     }
 

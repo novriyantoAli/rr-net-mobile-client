@@ -31,11 +31,8 @@ class DashboardFragment : Fragment() {
         val navController = findNavController()
         viewModel.dataState.observe(viewLifecycleOwner) {
             if (it != null) {
-                // show message
-                Log.e("DATA_STATE", "NOT_NULL")
             } else {
-                Log.e("DATA_STATE", "NULL")
-                navController.navigate(R.id.navigation_login)
+                navController.navigate(R.id.navigation_otp_mobile)
             }
         }
         _binding = FragmentDashboardBinding.inflate(inflater, group, false)

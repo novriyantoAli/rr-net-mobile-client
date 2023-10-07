@@ -4,6 +4,7 @@ import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import net.coblos.rrnet.domain.DataState
+import net.coblos.rrnet.domain.model.ClientAuth
 import net.coblos.rrnet.domain.model.req.PostMobileReq
 import net.coblos.rrnet.domain.model.req.PostVerificationReq
 import net.coblos.rrnet.domain.model.res.PostMobileRes
@@ -51,10 +52,10 @@ class RepositoryImpl @Inject constructor(private val services: Services) : Repos
 
     override suspend fun postVerification(
         url: String, verification: String
-    ): Flow<DataState<PostVerificationRes>> = flow {
+    ): Flow<DataState<ClientAuth?>> = flow {
         try {
             val postVerification = services.postVerification(url, PostVerificationReq(verification))
-            emit(DataState.Success(postVerification))
+            emit(DataState.Success(postVerification.data))
         } catch (e: HttpException) {
             e.printStackTrace()
             emit(DataState.Error(Exception(e)))

@@ -1,4 +1,10 @@
 <resources>
+    <!-- TODO: start API path -->
+    <string name="path_api_sign_up">api/sign/up</string>
+    <string name="path_api_sign_verify">api/sign/verify</string>
+    <string name="path_api_sign_out">api/sign/out</string>
+    <!-- TODO: end API path -->
+
     <string name="app_name">RRNet</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -21,4 +27,6 @@
     <string name="message_mobile_number_cannot_empty">Mobile number cannot be empty</string>
     <string name="message_invalid_mobile_number">Invalid mobile number</string>
     <string name="x2731">✱</string>
+    <string name="message_otp_error">OTP Verification box cannot be empty…</string>
+    <string name="otp1"><![CDATA[<font color="#a3a3a3">Enter OTP send to </font> <font color="#000000">+91-9876-564-656</font>]]></string>
 </resources>

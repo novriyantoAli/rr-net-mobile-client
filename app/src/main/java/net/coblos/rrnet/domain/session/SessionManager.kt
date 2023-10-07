@@ -9,10 +9,11 @@ class SessionManager(context: Context) {
         context.getSharedPreferences("userSessionData", Context.MODE_PRIVATE)
     var editor: SharedPreferences.Editor = userSession.edit()
 
-    fun createLoginSession(id: Int, name: String, token: String, isRemOn: Boolean) {
+    fun createLoginSession(id: String, name: String, mobile: String,  token: String, isRemOn: Boolean) {
         editor.putBoolean(IS_LOGIN, true)
-        editor.putInt(KEY_ID, id)
+        editor.putString(KEY_ID, id)
         editor.putString(KEY_USERNAME, name)
+        editor.putString(KEY_MOBILE, mobile)
         editor.putString(KEY_TOKEN, token)
         editor.putBoolean(KEY_REMEMBER_ME, isRemOn)
 
@@ -51,6 +52,7 @@ class SessionManager(context: Context) {
         return hashMapOf(
             KEY_ID to userSession.getString(KEY_ID, null),
             KEY_USERNAME to userSession.getString(KEY_USERNAME, null),
+            KEY_MOBILE to userSession.getString(KEY_MOBILE, null),
             KEY_TOKEN to userSession.getString(KEY_TOKEN, null)
         )
     }
@@ -66,9 +68,10 @@ class SessionManager(context: Context) {
 
     companion object {
         private const val IS_LOGIN = "isLoggedIn"
+        private const val KEY_ID = "userId"
+        private const val KEY_MOBILE = "userMobile"
         private const val KEY_USERNAME = "userName"
         private const val KEY_TOKEN = "userToken"
-        private const val KEY_ID = "userId"
         private const val KEY_REMEMBER_ME = "isRemOn"
         private const val KEY_URL = "activeUrl"
         private const val KEY_SERVER = "server"
